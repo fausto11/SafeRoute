@@ -22,6 +22,14 @@ const stylesUser=StyleSheet.create({
     TextButton:{
         textAlign:'center',
         color:'#ffff'
+    },
+    title:{
+        fontWeight:"800",
+        fontSize:28,
+        marginBottom:15
+    },
+    contentContainerStyle:{
+        padding:15
     }
 })
 

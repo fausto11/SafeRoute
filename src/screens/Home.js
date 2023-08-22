@@ -1,28 +1,58 @@
-import { View, Text, Button ,Alert} from 'react-native'
-import React from 'react'
-import app from '../api/firebaseConfig'
-import { getAuth, signOut } from 'firebase/auth'
+import { View, Text, Button ,Alert, SafeAreaView, FlatList} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import stylesUser from '../styles/styleUser'
+import Report from '../components/Report';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-const auth=getAuth(app)
-export default function Home(props) {
+export default function Home() {
+  const [reports, setReports] = useState([]);
 
-    const close =async()=>{
-        try {
-            await signOut(auth)
-            Alert.alert('Cerrando Sesion')
-            props.navigation.navigate('Login')
-        } catch (error) {
-            Alert.alert('Error')
-        }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+ 
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://192.168.100.137:5143/reports/1");
+      const data = await response.json();
+      setReports(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
+  };
+  
+  function clearTodo(id){
+    setReports(reports.filter((report)=>report.id !== id))
+  }
+
+  function toggleReport(id){
+    setReports(
+      reports.map((report)=>
+        report.id === id
+        ? {...report, completed: report.completed ===1 ? 0: 1}
+        : report
+      )
+    )
+  }
+
   return (
-    <View style={stylesUser.container}>
-      <View>
-        
+    <BottomSheetModalProvider>
+      <View style={stylesUser.container}>
+        <SafeAreaView >
+        <FlatList
+          data={reports}
+          keyExtractor={(report)=>report.id}
+          renderItem={({item})=>(
+            <Report {...item} toggleReport={toggleReport} clearTodo={clearTodo}/>
+          )}
+          ListHeaderComponent={()=><Text style={stylesUser.title}>Today</Text>}
+          contentContainerStyle={stylesUser.contentContainerStyle}
+          />
+          </SafeAreaView>
       </View>
-      <Text>Bienvenido</Text>
-      <Button title='Close' onPress={close}>Close</Button>
-    </View>
-  )
+    </BottomSheetModalProvider>
+    
+    
+  );
 }

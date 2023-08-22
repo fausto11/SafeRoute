@@ -29,7 +29,7 @@ const stylesDenuncia=StyleSheet.create({
         backgroundColor:'#ffff',
         borderRadius:10,
         width:'95%',
-        height:'80%',
+        height:'100%',
         padding:5,
         shadowColor:'#000',
         shadowOffset:{
@@ -45,6 +45,16 @@ const stylesDenuncia=StyleSheet.create({
         borderRadius:30,
         marginVertical:50
         
+    },
+    scrollView: {
+        
+        backgroundColor: 'white',
+        
+      },
+      map:{ 
+        paddingBottom:20,
+        height:'70%',
+        width:'100%'
     },
 })
 
