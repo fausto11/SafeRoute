@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,StatusBar } from "react-native";
 
 
 const stylesDenuncia=StyleSheet.create({
@@ -47,15 +47,28 @@ const stylesDenuncia=StyleSheet.create({
         
     },
     scrollView: {
-        
+        paddingHorizontal: 20,
+        paddingVertical: 30,
         backgroundColor: 'white',
         
       },
-      map:{ 
-        paddingBottom:20,
-        height:'70%',
+      mapContainer:{ 
+        paddingBottom:1,
+        height:400,
+        borderRadius: 10,
+        overflow: 'hidden',
         width:'100%'
     },
+    map:{
+        flex:1,
+    },
+    preguntaContainer: {
+        marginBottom: 10,
+    },
+    containerView: {
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
+      },
 })
 
 export default stylesDenuncia

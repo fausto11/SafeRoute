@@ -64,6 +64,21 @@ export default function MapComponentLocation() {
         ></MapViewDirections>
         
       </MapView>
+      <View >
+        <GooglePlacesAutocomplete
+              placeholder='Introducir ubicacion'
+              //onPress={handleOriginInputChange}
+              ref={originRef}
+              fetchDetails={true}
+              query={{
+                key:PLACES_MAPS_API,
+                language:'en'
+              }}
+              styles={stylesMaps.boxText}
+            
+
+            ></GooglePlacesAutocomplete>
+      </View>
      
     </View>
   

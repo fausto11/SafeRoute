@@ -1,217 +1,165 @@
-import { SafeAreaView, Text, TextInput, View, Picker, SectionList, Button,TouchableOpacity, FlatList, ScrollView,StatusBar} from 'react-native'
-import React, { useRef ,useEffect} from 'react'
-import styles from '../styles/stylesLogin'
-import { useState } from 'react';
-import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list'
-import stylesDenuncia from '../styles/stylesDenuncia';
-import MapComponent from '../components/MapComponent';
-import MapComponentLocation from '../components/MapComponentLocation';
-
-import MapView ,{ Marker, Polyline, DirectionsService}from 'react-native-maps'
-import MapViewDirections from 'react-native-maps-directions'
-import {GOOGLE_MAPS_KEY,PLACES_MAPS_API} from '@env'
-import stylesMaps from '../styles/stylesMap'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
-//import SelectList from 'react-native-dropdown-select-list'
+import { View, Text,StyleSheet,SafeAreaView,TextInput, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+import Layout from '../components/Layout'
+import { saveReport } from '../api/api'
 
 
-export default function FormDenuncia() {
-  const [category, setCategory] = useState();
-  const [subcategory,setSubCategory]=useState();
-  const [circuito,setSubcircuito]=useState();
-  const [robo, setRobo]=useState();
-  const [hour, setHour]=useState();
-  const [consumo, setConsumo]=useState();
-  const [venta, setVenta]=useState();
+import tw from 'twrnc';
+import Map from '../components/Map';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import NavigateCard from '../components/NavigateCard';
+import RideOptionsRute from '../components/RideOptionsRute';
 
-  const originRef=useRef()
 
-  const [origin,setOrigin]= useState({
-    latitude:-0.268026,
-    longitude: -78.531686
-  })
+const FormDenuncia = () => {
+  const Stack= createNativeStackNavigator()
 
-  useEffect(()=>{
-    getLocatioPermission
-  },[])
+ const [reports,setReports]=useState({
+  parroquia:'',
+  distrito:'',
+  circuito:'',
+  categoria:'',
+  latitud:'',
+  longitud:''
+ });
 
-  async function getLocatioPermission(){
-    let {status}= await Location.requestForegroundPermissionsAsync()
-    if (status !== 'garanted'){
-      alert('Permission denied')
-      return;
-    }
+const habdleChange=(name,value) => setReports({
+  ...reports,[name]:value
+});
 
-    let location=await Location.getCurrentPositionAsync({});
-    const current ={
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude
-    }
-    setOrigin(current)
-  }
-  
-
-  const parroquias=[
-    {key:'Al',value:'Alangasi'},
-    {key:'Am',value:'Amaguaña'},
-    {key:'Cl',value:'Calderon'},
-  ]
-
-  const distrito={
-    'Al':[
-      {key:'1',value:'Los Chillos'}
-    ],
-    'Am':[
-      {key:'2',value:'Los Chillos'},
-    ],
-    'Cl':[
-      {key:'3',value:'Calderon'}
-    ]
-  }
-
-  const circuitos={
-    'Al':[
-      {key:'1',value:'Alangasi'}
-    ],
-    'Am':[
-      {key:'2',value:'Amaguaña'},
-      {key:'3',value:'El Ejido'},
-      {key:'4',value:'Santa Isabel'},
-    ],
-    'Cl':[
-      {key:'5',value:'Bellavista'},
-      {key:'6',value:'Bicentenario'},
-      {key:'7',value:'Calderon'},
-      {key:'8',value:'Carapungo'},
-    ]
-  }
-
-  const incidencia=[
-    {key:'RO',value:'Robo'},
-    {key:'RP',value:'Robo Personas'},
-    {key:'TR',value:'Tentativa de Robo'},
-    {key:'RC',value:'Robo a Carros'},
-  ]
-    
-  const consumoDroga=[
-    {key:'1',value:'SI'},
-    {key:'2',value:'NO'},
-  ]
-  const ventaDroga=[
-    {key:'1',value:'SI'},
-    {key:'2',value:'NO'},
-  ]
-
-  const hourPMandAM=[
-      {key:'1',value:'1'},
-      {key:'2',value:'2'},
-      {key:'3',value:'3'},
-      {key:'4',value:'4'},
-      {key:'5',value:'5'},
-      {key:'6',value:'6'},
-      {key:'7',value:'7'},
-      {key:'8',value:'8'},
-      {key:'9',value:'9'},
-      {key:'10',value:'10'},
-      {key:'11',value:'11'},
-      {key:'12',value:'12'},
-      {key:'13',value:'13'},
-      {key:'14',value:'14'},
-      {key:'15',value:'15'},
-      {key:'16',value:'16'},
-      {key:'17',value:'17'},
-      {key:'18',value:'18'},
-      {key:'19',value:'19'},
-      {key:'20',value:'20'},
-      {key:'21',value:'21'},
-      {key:'22',value:'22'},
-      {key:'23',value:'23'},
-      {key:'24',value:'24'},
-  ]
-    
-      
-  
-  
+const handleSubmit=()=>{
+  saveReport(reports)
+}
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={stylesDenuncia.scrollView}>
-        <View style={{ paddingHorizontal: 20, paddingBottom: 20 }}>
-            <Text>Llena el Formulario</Text>
-            <View  >
-              <View>
-                <Text>Parroquia</Text>
-                  <SelectList  
-                    setSelected={setCategory}
-                    data={parroquias}
-                    placeholder={"Selecciona Parroquia"}
-                    defaultOption={{key:'Al',value:'Alangasi'}}
-                  >
-                  </SelectList>
-                
-                  <Text>Distrito</Text>
-                  <SelectList
-                    setSelected={setSubCategory}
-                    data={distrito[category] || []}
-                    placeholder={'Seleccione Distrito'}
-                    defaultOption={distrito[category] && distrito[category][0]}
-                  ></SelectList>
-                  <Text>Circuito</Text>
-                  <SelectList
-                    setSelected={setSubcircuito}
-                    data={circuitos[category] || []}
-                    placeholder={'Seleccione el Circuito'}
-                    defaultOption={circuitos[category] && circuitos[category][0]}
-                  ></SelectList>
-              </View>
-              <View>
-                <Text>Delito</Text>
-                <SelectList  
-                    setSelected={setRobo}
-                    data={incidencia}
-                    placeholder={"Selecciona la Incidencia"}
-                    defaultOption={{key:'RO',value:'Robo'}}
-                  >
-                  </SelectList>
-              </View>
-              <View>
-                <Text>Hora</Text>
-                <SelectList
-                setSelected={setHour}
-                  data={hourPMandAM}
-                  placeholder={"Selecciona la hora de delito"}
-                ></SelectList>
-              </View>
-              <View>
-                <Text>Consumo</Text>
-                <SelectList
-                setSelected={setConsumo}
-                  data={consumoDroga}
-                  placeholder={"Selecciona"}
-                ></SelectList>
-              </View>
-              <View>
-                <Text>Venta</Text>
-                <SelectList
-                setSelected={setVenta}
-                  data={ventaDroga}
-                  placeholder={"Selecciona"}
-                ></SelectList>
-              </View>
-              <View>
-                <Text>Ingresa Ubicación</Text> 
-                <MapView style={stylesDenuncia.map}></MapView>
-              </View>
-              <View style={styles.button}>
-                    <TouchableOpacity style={styles.boxButton} >
-                        <Text style={styles.TextButton}>Send</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-          </View> 
-      </ScrollView>
+    <SafeAreaView >
+      <Layout>
+        <View>
+          <Text
+            style={stylesFD.inputTitle}
+          >PARROQUIA</Text>
+          <TextInput
+            style={stylesFD.input}
+            placeholder='Ingresa la parroquia'
+            placeholderTextColor="#546574"
+            onChangeText={(value)=>habdleChange('parroquia',value)}
+          ></TextInput>
+        </View>
+        <View>
+          <Text
+            style={stylesFD.inputTitle}
+          >DISTRITO</Text>
+          <TextInput
+            style={stylesFD.input}
+            placeholder='Ingresa el Distrito'
+            placeholderTextColor="#546574"
+            onChangeText={(value)=>habdleChange('distrito',value)}
+          ></TextInput>
+        </View>
+        <View>
+          <Text
+            style={stylesFD.inputTitle}
+          >CIRCUITO</Text>
+          <TextInput
+            style={stylesFD.input}
+            placeholder='Ingresa el circuito'
+            placeholderTextColor="#546574"
+            onChangeText={(value)=>habdleChange('circuito',value)}
+          ></TextInput>
+        </View>
+        <View>
+          <Text
+            style={stylesFD.inputTitle}
+          >DELITO</Text>
+          <TextInput
+            style={stylesFD.input}
+            placeholder='Ingresa el Delito'
+            placeholderTextColor="#546574"
+            onChangeText={(value)=>habdleChange('categoria',value)}
+          ></TextInput>
+        </View>
+        <View>
+          <Text
+            style={stylesFD.inputTitle}
+          >LATITUD</Text>
+          <TextInput
+            style={stylesFD.input}
+            placeholder='latitud'
+            placeholderTextColor="#546574"
+            onChangeText={(value)=>habdleChange('latitud',value)}
+          ></TextInput>
+        </View>
         
+        <View>
+          <Text
+            style={stylesFD.inputTitle}
+          >LONGITUD</Text>
+          <TextInput
+            style={stylesFD.input}
+            placeholder='longitud'
+            placeholderTextColor="#546574"
+            onChangeText={(value)=>habdleChange('longitud',value)}
+          ></TextInput>
+        </View>
+        <TouchableOpacity style={stylesFD.buttonSave} onPress={handleSubmit}>
+          <Text style={stylesFD.buttonText}>Enviar Denuncia</Text>
+        </TouchableOpacity>
+      </Layout>
+
+      <View>
+        <View style={tw`h-1/2`}>
+            <Map></Map>
+        </View>
+        <View style={tw`h-1/2`}>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name='NavigateCard'
+                    component={NavigateCard}
+                    options={{
+                        headerShown:false
+                    }}
+                ></Stack.Screen>
+                
+            </Stack.Navigator>    
+        </View>  
+    </View>
+
     </SafeAreaView>
   )
 }
+
+const stylesFD=StyleSheet.create({
+  input:{
+    width:300,
+    backgroundColor:"white",
+    marginBottom:7,
+    borderWidth:1,
+    borderColor:"green",
+    height:35,
+    padding:4,
+    textAlign:"center",
+    borderRadius:8
+    
+  },
+  inputTitle:{
+    color:"white",
+    marginBottom:3
+  },
+  buttonSave:{
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:8,
+    marginBottom:10,
+    backgroundColor:"#10ac84",
+    width:300,
+    alignItems:"center",
+    justifyContent:"center",
+   
+  },
+  buttonText:{
+    color:"#ffffff",
+    textAlign:"center"
+  }
+})
+
+export default FormDenuncia
