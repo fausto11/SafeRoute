@@ -1,6 +1,1 @@
-![Imagen de WhatsApp 2024-04-09 a las 09 40 51_43a34d56](https://github.com/fausto11/SafeRoute/assets/65833997/489274ec-d0fb-4041-bec5-305b0bb4b8d8)
-![Imagen de WhatsApp 2024-04-09 a las 09 40 51_ea243564](https://github.com/fausto11/SafeRoute/assets/65833997/72436b52-358e-4fbf-9dc4-157105df819e)
-![Imagen de WhatsApp 2024-04-09 a las 09 40 51_5dcb0045](https://github.com/fausto11/SafeRoute/assets/65833997/b3a01c10-5b9d-44d8-b183-d7f36af5e146)
-![Imagen de WhatsApp 2024-04-09 a las 09 40 51_5dcb0045](https://github.com/fausto11/SafeRoute/assets/65833997/8128e9c5-10bb-47ac-ba98-da34ce10906c)
-![Imagen de WhatsApp 2024-04-09 a las 09 40 51_dd9c72c6](https://github.com/fausto11/SafeRoute/assets/65833997/882cd5d4-baed-41ec-8d9e-055309d6d18c)
-![Imagen de WhatsApp 2024-04-09 a las 09 40 52_52f97a56](https://github.com/fausto11/SafeRoute/assets/65833997/5d6d66ca-2b58-4438-8c53-bf96ff723f56)
+![App safe](https://github.com/fausto11/SafeRoute/assets/65833997/a7f61894-3438-4faa-b267-f6bcb54a8eb1)
